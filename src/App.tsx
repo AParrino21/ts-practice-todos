@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ToDoList from './components/ToDoList';
+import NewTodo from './components/NewTodo';
+import { Todo } from './todo.model';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// TO USE REACT ROUTER DOM --  npm i @types/react-router-dom
+
+const App: React.FC = () => {
+
+  // state array with the state type set as an array of objects with an id property that is a string and a text property that is a string ---importing from the todo.model.ts file
+  const [todos, setTodos] = useState<Todo[]>([])
+
+  const todoAddHandler = (text: string) => {
+
+    setTodos(prevTodos => [...prevTodos, { id: Math.random().toString(), text: text }])
+  }
+
+  const deleteHandler = (todoId: string) => {
+    setTodos(prevTodos => {
+      return prevTodos.filter(todo => todo.id !== todoId)
+    })
+  }
+
+  return <div className='App'>
+    <NewTodo
+      onAddTodo={todoAddHandler}
+    />
+    <ToDoList
+      items={todos}
+      onDeleteTodo={deleteHandler}
+    />
+  </div>
 }
 
 export default App;
